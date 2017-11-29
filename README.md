@@ -1,4 +1,4 @@
-# Modelar-Postgres-Adapter
+# Modelar-Sqlite-Adapter
 
 **This is an adapter for [Modelar](http://modelar.hyurl.com) to connect**
 **SQLite database.**
@@ -17,10 +17,6 @@ const IbmdbAdapter = require("modelar-sqlite-adpater");
 
 DB.setAdapter("sqlite", IbmdbAdapter).init({
     type: "sqlite",
-    database: "SAMPLE",
-    host: "127.0.0.1",
-    port: 50000,
-    user: "db2admin",
-    password: "******"
+    database: "sample.db"
 });
 ```
