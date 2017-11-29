@@ -1,5 +1,5 @@
 const Pool = require("better-sqlite-pool");
-const Adapter = require("modelar").Adapter;
+const { Adapter } = require("modelar");
 const Pools = {};
 
 class SqliteDBAdapter extends Adapter {
@@ -55,7 +55,7 @@ class SqliteDBAdapter extends Adapter {
             this.connection.close();
     }
 
-    static close() {
+    closeAll() {
         for (let i in Pools) {
             Pools[i].close();
             delete Pools[i];
