@@ -13,9 +13,9 @@ npm install modelar-sqlite-adpater
 
 ```javascript
 const { DB } = require("modelar");
-const IbmdbAdapter = require("modelar-sqlite-adpater");
+const SqliteAdapter = require("modelar-sqlite-adpater");
 
-DB.setAdapter("sqlite", IbmdbAdapter).init({
+DB.setAdapter("sqlite", SqliteAdapter).init({
     type: "sqlite",
     database: "sample.db"
 });
