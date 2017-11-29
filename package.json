@@ -1,0 +1,28 @@
+{
+    "name": "modelar-sqlite-adapter",
+    "version": "0.1.0",
+    "description": "An adapter for Modelar to connect SQLite database.",
+    "main": "index.js",
+    "scripts": {
+        "test": "node test"
+    },
+    "keywords": [
+        "modelar",
+        "sqlite",
+        "adapter"
+    ],
+    "author": {
+        "name": "Ayon Lee",
+        "email": "i@hyurl.com",
+        "url": "hyurl.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hyurl/modelar-sqlite-adapter.git"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "better-sqlite-pool": "^0.1.0",
+        "modelar": "^2.0.0"
+    }
+}
