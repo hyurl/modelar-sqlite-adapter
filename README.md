@@ -6,14 +6,14 @@
 ## Install
 
 ```sh
-npm install modelar-sqlite-adpater
+npm install modelar-sqlite-adapter
 ```
 
 ## How To Use
 
 ```javascript
 const { DB } = require("modelar");
-const SqliteAdapter = require("modelar-sqlite-adpater");
+const SqliteAdapter = require("modelar-sqlite-adapter");
 
 DB.setAdapter("sqlite", SqliteAdapter).init({
     type: "sqlite",
