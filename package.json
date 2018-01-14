@@ -23,6 +23,6 @@
     "license": "MIT",
     "dependencies": {
         "better-sqlite-pool": "^0.1.0",
-        "modelar": "^2.0.0"
+        "modelar": "^2.1.0"
     }
 }
