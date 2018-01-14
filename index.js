@@ -2,7 +2,7 @@ const Pool = require("better-sqlite-pool");
 const { Adapter } = require("modelar");
 const Pools = {};
 
-class SqliteDBAdapter extends Adapter {
+class SqliteAdapter extends Adapter {
 
     /** Methods for DB */
 
@@ -16,12 +16,7 @@ class SqliteDBAdapter extends Adapter {
         });
     }
 
-    query(db, sql, bindings = []) {
-        if (this.connection === null) {
-            return this.connect(db).then(db => {
-                return this.query(db, sql, bindings);
-            });
-        }
+    query(db, sql, bindings) {
         return new Promise((resolve, reject) => {
             var gets = ["select", "pragma"];
             if (gets.includes(db._command)) {
@@ -57,7 +52,7 @@ class SqliteDBAdapter extends Adapter {
             this.connection.close();
     }
 
-    closeAll() {
+    static close() {
         for (let i in Pools) {
             Pools[i].close();
             delete Pools[i];
@@ -79,10 +74,10 @@ class SqliteDBAdapter extends Adapter {
                 table._autoIncrement = field.autoIncrement;
             }
             if (field.length instanceof Array) {
-                field.length = field.length.join(",");
-            }
-            if (field.length)
+                field.type += "(" + field.length.join(",") + ")";
+            } else if (field.length) {
                 field.type += "(" + field.length + ")";
+            }
 
             let column = table.backquote(field.name) + " " + field.type;
 
@@ -103,7 +98,8 @@ class SqliteDBAdapter extends Adapter {
             if (field.comment)
                 column += " comment " + table.quote(field.comment);
             if (field.foreignKey.table) {
-                column += " references " + table.backquote(field.foreignKey.table) +
+                column += " references " + 
+                    table.backquote(field.foreignKey.table) +
                     " (" + table.backquote(field.foreignKey.field) + ")" +
                     " on delete " + field.foreignKey.onDelete +
                     " on update " + field.foreignKey.onUpdate;
@@ -131,13 +127,6 @@ class SqliteDBAdapter extends Adapter {
             }
         });
     }
-
-    /** Methods for Query */
-
-    random(query) {
-        query._orderBy = "random()";
-        return query;
-    }
 }
 
-module.exports = new SqliteDBAdapter;
+module.exports = SqliteAdapter;
