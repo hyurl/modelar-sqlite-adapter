@@ -29,9 +29,13 @@ class SqliteAdapter extends Adapter {
                 }
             } else {
                 try {
-                    var res = this.connection.prepare(sql).run(bindings);
-                    db.insertId = res.lastInsertROWID;
-                    db.affectedRows = res.changes;
+                    if (bindings) {
+                        let res = this.connection.prepare(sql).run(bindings);
+                        db.insertId = res.lastInsertROWID;
+                        db.affectedRows = res.changes;
+                    } else {
+                        this.connection.exec(sql);
+                    }
                     resolve(db);
                 } catch (e) {
                     reject(e);
@@ -98,7 +102,7 @@ class SqliteAdapter extends Adapter {
             if (field.comment)
                 column += " comment " + table.quote(field.comment);
             if (field.foreignKey.table) {
-                column += " references " + 
+                column += " references " +
                     table.backquote(field.foreignKey.table) +
                     " (" + table.backquote(field.foreignKey.field) + ")" +
                     " on delete " + field.foreignKey.onDelete +
@@ -128,5 +132,6 @@ class SqliteAdapter extends Adapter {
         });
     }
 }
+SqliteAdapter.SqliteAdapter = SqliteAdapter;
 
 module.exports = SqliteAdapter;
