@@ -1,5 +1,5 @@
 const { DB, Table, User } = require("modelar");
-const SqliteAdapter = require("./");
+const { SqliteAdapter } = require("./");
 
 DB.setAdapter("sqlite", SqliteAdapter).init({
     type: "sqlite",
