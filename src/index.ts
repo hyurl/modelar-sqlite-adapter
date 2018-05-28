@@ -78,13 +78,14 @@ export class SqliteAdapter extends Adapter {
                 table["_autoIncrement"] = field.autoIncrement;
             }
 
+            let type = field.type;
             if (field.length instanceof Array) {
-                field.type += "(" + field.length.join(",") + ")";
+                type += "(" + field.length.join(",") + ")";
             } else if (field.length) {
-                field.type += "(" + field.length + ")";
+                type += "(" + field.length + ")";
             }
 
-            let column = table.backquote(field.name) + " " + field.type;
+            let column = table.backquote(field.name) + " " + type;
 
             if (field.primary)
                 column += " primary key";
@@ -92,24 +93,24 @@ export class SqliteAdapter extends Adapter {
             if (field.autoIncrement instanceof Array)
                 column += " autoincrement";
 
+            if (field.unique)
+                column += " unique";
+
+            if (field.unsigned)
+                column += " unsigned";
+
+            if (field.notNull)
+                column += " not null";
+
             if (field.default === null)
                 column += " default null";
             else if (field.default !== undefined)
                 column += " default " + table.quote(field.default);
 
-            if (field.notNull)
-                column += " not null";
-
-            if (field.unsigned)
-                column += " unsigned";
-
-            if (field.unique)
-                column += " unique";
-
             if (field.comment)
                 column += " comment " + table.quote(field.comment);
 
-            if (field.foreignKey.table) {
+            if (field.foreignKey && field.foreignKey.table) {
                 column += " references " +
                     table.backquote(field.foreignKey.table) +
                     " (" + table.backquote(field.foreignKey.field) + ")" +
