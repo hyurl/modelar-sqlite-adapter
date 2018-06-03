@@ -5,7 +5,8 @@
 
 ## Prerequisites
 
-- `node` version higher than 4.0.0.
+- `node` version higher than 4.0.0 (according to 
+	[node-sqlite3](https://github.com/mapbox/node-sqlite3)).
 - `node-pre-gyp` installed (`npm i -g node-pre-gyp`) before install this 
 	package.
 
