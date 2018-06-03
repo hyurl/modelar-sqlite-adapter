@@ -1,0 +1,7 @@
+language: node_js
+sudo: yes
+node_js:
+  - '4.0'
+  - 'stable'
+before_install:
+  - npm i -g node-pre-gyp node-gyp

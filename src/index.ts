@@ -1,18 +1,27 @@
 import { Adapter, DB, Table } from "modelar";
-import { Pool, PoolConnection } from "better-sqlite-pool";
+import { Pool, Connection} from "./pool";
+import assign = require("lodash/assign");
 
 export class SqliteAdapter extends Adapter {
-    connection: PoolConnection;
-    static Pools: { [dsn: string]: Pool } = {};
+    connection: Connection;
+    private inTransaction: boolean = false;
 
     connect(db: DB): Promise<DB> {
         if (SqliteAdapter.Pools[db.dsn] === undefined) {
-            SqliteAdapter.Pools[db.dsn] = new Pool(db.config.database, <any>db.config);
+            let config: any = assign({}, db.config);
+            config.acquireTimeout = config.timeout;
+            SqliteAdapter.Pools[db.dsn] = new Pool(db.config.database, config);
         }
 
-        return SqliteAdapter.Pools[db.dsn].acquire().then(connection => {
-            this.connection = connection;
-            return db;
+        return new Promise((resolve, reject) => {
+            SqliteAdapter.Pools[db.dsn].acquire((err, connection) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    this.connection = connection;
+                    resolve(db);
+                }
+            });
         });
     }
 
@@ -20,24 +29,42 @@ export class SqliteAdapter extends Adapter {
         return new Promise((resolve, reject) => {
             if (db.command == "select" || db.command == "pragma") {
                 // Deal with select or pragma statements.
-                try {
-                    db.data = this.connection.prepare(sql).all(bindings);
-                    resolve(db);
-                } catch (e) {
-                    reject(e);
-                }
-            } else {
-                try {
-                    if (bindings) {
-                        let res = this.connection.prepare(sql).run(bindings);
-                        db.insertId = parseInt(<any>res.lastInsertROWID);
-                        db.affectedRows = res.changes;
+                let statement = this.connection.prepare(sql);
+                statement.all(bindings, (err, rows) => {
+                    if (err) {
+                        reject(err);
                     } else {
-                        this.connection.exec(sql);
+                        db.data = rows || [];
+                        resolve(db);
                     }
-                    resolve(db);
-                } catch (e) {
-                    reject(e);
+                    statement.finalize();
+                });
+            } else {
+                if (bindings) {
+                    let statement = this.connection.prepare(sql);
+                    statement.run(bindings, function (err) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            db.insertId = this.lastID;
+                            db.affectedRows = this.changes;
+                            resolve(db);
+                        }
+                        statement.finalize();
+                    });
+                } else {
+                    this.connection.exec(sql, (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            if (db.command == "begin") {
+                                this.inTransaction = true;
+                            } else if (db.command == "commit" || db.command == "rollback") {
+                                this.inTransaction = false;
+                            }
+                            resolve(db);
+                        }
+                    });
                 }
             }
         });
@@ -45,8 +72,15 @@ export class SqliteAdapter extends Adapter {
 
     release(): void {
         if (this.connection) {
-            this.connection.release();
-            this.connection = null;
+            if (this.inTransaction) {
+                this.connection.exec("rollback", () => {
+                    this.inTransaction = false;
+                    return this.release();
+                });
+            } else {
+                this.connection.release();
+                this.connection = null;
+            }
         }
     }
 
@@ -143,3 +177,9 @@ export class SqliteAdapter extends Adapter {
         });
     }
 }
+
+export namespace SqliteAdapter {
+    export const Pools: { [dsn: string]: Pool } = {};
+}
+
+export default SqliteAdapter;

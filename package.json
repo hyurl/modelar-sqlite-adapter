@@ -1,32 +1,42 @@
 {
-    "name": "modelar-sqlite-adapter",
-    "version": "3.0.1",
-    "description": "An adapter for Modelar to connect SQLite database.",
-    "main": "dist/index.js",
-    "types": "src/index.ts",
-    "scripts": {
-        "test": "node test"
-    },
-    "keywords": [
-        "modelar",
-        "sqlite",
-        "adapter"
-    ],
-    "author": {
-        "name": "Ayon Lee",
-        "email": "i@hyurl.com",
-        "url": "http://hyurl.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/hyurl/modelar-sqlite-adapter.git"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "better-sqlite-pool": "^0.1.1",
-        "modelar": "^3.0.0"
-    },
-    "engines": {
-        "node": ">=6.0"
-    }
+  "name": "modelar-sqlite-adapter",
+  "version": "3.0.2",
+  "description": "An adapter for Modelar to connect SQLite database.",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "modelar",
+    "sqlite",
+    "sqlite3",
+    "adapter"
+  ],
+  "author": {
+    "name": "Ayon Lee",
+    "email": "i@hyurl.com",
+    "url": "http://hyurl.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyurl/modelar-sqlite-adapter.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/lodash": "^4.14.109",
+    "@types/sqlite3": "^3.1.3",
+    "lodash": "^4.17.10",
+    "modelar": "^3.0.0",
+    "sqlite3": "^4.0.0",
+    "tslib": "^1.9.2"
+  },
+  "engines": {
+    "node": ">=4.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.1",
+    "co": "^4.6.0",
+    "mocha": "^5.2.0"
+  }
 }

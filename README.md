@@ -3,17 +3,16 @@
 **This is an adapter for [Modelar](http://modelarjs.org) to connect**
 **SQLite database.**
 
+## Prerequisites
+
+- `node` version higher than 4.0.0.
+- `node-pre-gyp` installed (`npm i -g node-pre-gyp`) before install this 
+	package.
+
 ## Install
 
 ```sh
 npm install modelar-sqlite-adapter --save
-```
-
-The above command will install the latest version for Modelar 3.0+, if you're 
-using Modelar 2.X, use the following command instead:
-
-```sh
-npm install modelar-sqlite-adapter --tag modelar2 --save
 ```
 
 ## How To Use
@@ -22,7 +21,10 @@ npm install modelar-sqlite-adapter --tag modelar2 --save
 const { DB } = require("modelar");
 const { SqliteAdapter } = require("modelar-sqlite-adapter");
 
-DB.setAdapter("sqlite", SqliteAdapter).init({
+DB.setAdapter("sqlite", SqliteAdapter);
+
+// then using the type 'sqlite' in db.config
+DB.init({
     type: "sqlite",
     database: "sample.db"
 });
