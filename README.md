@@ -1,6 +1,6 @@
 # Modelar-Sqlite-Adapter
 
-**This is an adapter for [Modelar](http://modelarjs.org) to connect**
+**This is an adapter for [Modelar](https://github.com/hyurl/modelar) to connect**
 **SQLite database.**
 
 ## Prerequisites
