@@ -50,7 +50,7 @@ describe("Query.prototype.insert()", function () {
                     err = _err;
                 } else {
                     try {
-                        assert.equal(query.sql, "insert into `users` values (?, ?, ?, ?)");
+                        assert.equal(query.sql, "insert into `users` values (?, ?, ?, ?, ?, ?)");
                     } catch (_err) {
                         err = _err;
                     }

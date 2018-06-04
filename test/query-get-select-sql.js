@@ -50,6 +50,6 @@ describe("Query.prototype.getSelectSQL()", function () {
     it("should generate an SQL with where clause, limit and offset clause, and order by rand() clause", function () {
         query.random();
 
-        assert.equal(query.getSelectSQL(), "select `name`, `email` from `users` where `id` = ? order by rand() limit 6,10");
+        assert.equal(query.getSelectSQL(), "select `name`, `email` from `users` where `id` = ? order by random() limit 6,10");
     });
 });
