@@ -28,24 +28,19 @@ describe("Query.prototype.insert()", function () {
 
     describe("insert(data: any[] })", function () {
         it("should insert data with an array", function (done) {
-            var db = new DB({
-                type: "mysql",
-                database: "modelar",
-                host: "localhost",
-                port: 3306,
-                user: "root",
-                password: "161301"
-            });
+            var db = new DB(config);
             var query = new Query("users").use(db);
 
             query.insert([
                 1,
                 "Ayon Lee",
                 "i@hyurl.com",
-                "123456"
+                "123456",
+                20,
+                90
             ]).then(function () {
-                assert.equal(query.sql, "insert into `users` values (?, ?, ?, ?)");
-                assert.deepEqual(query.bindings, [1, "Ayon Lee", "i@hyurl.com", "123456"]);
+                assert.equal(query.sql, "insert into `users` values (?, ?, ?, ?, ?, ?)");
+                assert.deepEqual(query.bindings, [1, "Ayon Lee", "i@hyurl.com", "123456", 20, 90]);
                 db.close();
                 done();
             }).catch(function (_err) {

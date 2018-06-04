@@ -10,7 +10,7 @@ describe("Query.prototype.getSelectSQL()", function () {
         assert.equal(query.getSelectSQL(), "select * from `users`");
     });
 
-    it("should generate a simple SQL and select only 'name', `email`", function () {
+    it("should generate a simple SQL and select only 'name', 'email'", function () {
         query.select("name", "email");
 
         assert.equal(query.getSelectSQL(), "select `name`, `email` from `users`");

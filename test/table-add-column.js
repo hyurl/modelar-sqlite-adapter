@@ -267,50 +267,6 @@ describe("Table.prototype.notNull()", function () {
     });
 });
 
-describe("Table.prototype.unsigned()", function () {
-    it("should add a field with unsigned value as expected", function () {
-        var table = new Table("users");
-        table.addColumn("age", "int", 3).unsigned();
-        assert.deepStrictEqual(table.schema, {
-            age: {
-                name: "age",
-                type: "int",
-                length: 3,
-                notNull: false,
-                default: undefined,
-                primary: false,
-                autoIncrement: false,
-                unsigned: true,
-                unique: false,
-                comment: "",
-                foreignKey: null
-            }
-        });
-    });
-});
-
-describe("Table.prototype.comment()", function () {
-    it("should add a field with a comment as expected", function () {
-        var table = new Table("users");
-        table.addColumn("age", "int", 3).unsigned().comment("How old is the user?");
-        assert.deepStrictEqual(table.schema, {
-            age: {
-                name: "age",
-                type: "int",
-                length: 3,
-                notNull: false,
-                default: undefined,
-                primary: false,
-                autoIncrement: false,
-                unsigned: true,
-                unique: false,
-                comment: "How old is the user?",
-                foreignKey: null
-            }
-        });
-    });
-});
-
 describe("Table.prototype.foreignKey()", function () {
     describe("foreignKey(config: ForeignKeyConfig)", function () {
         it("should add a foreign key as expected", function () {
