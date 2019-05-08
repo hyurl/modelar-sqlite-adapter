@@ -1,6 +1,6 @@
 {
   "name": "modelar-sqlite-adapter",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "An adapter for Modelar to connect SQLite database.",
   "main": "dist/index.js",
   "types": "src/index.ts",
