@@ -1,0 +1,7 @@
+.vscode/
+node_modules/
+test/
+tsconfig.json
+*.tgz
+*.db
+.*
