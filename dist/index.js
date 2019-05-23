@@ -71,7 +71,8 @@ var SqliteAdapter = /** @class */ (function (_super) {
                             if (db.command == "begin") {
                                 _this.inTransaction = true;
                             }
-                            else if (db.command == "commit" || db.command == "rollback") {
+                            else if (db.command == "commit"
+                                || db.command == "rollback") {
                                 _this.inTransaction = false;
                             }
                             resolve(db);
@@ -157,19 +158,32 @@ var SqliteAdapter = /** @class */ (function (_super) {
             " (\n\t" + columns.join(",\n\t") + "\n)";
     };
     SqliteAdapter.prototype.create = function (table) {
-        var ddl = table.getDDL(), increment = table["_autoIncrement"];
-        return table.query(ddl).then(function (table) {
-            if (increment) {
-                var seqSql = "insert into sqlite_sequence (`name`, `seq`) " +
-                    ("values ('" + table.name + "', " + (increment[0] - 1) + ")");
-                return table.query(seqSql).then(function (table) {
-                    table.sql = ddl + ";\n" + seqSql;
-                    return table;
-                });
-            }
-            else {
-                return table;
-            }
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var ddl, increment, seqSql;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        ddl = table.getDDL(), increment = table["_autoIncrement"];
+                        return [4 /*yield*/, table.query("pragma foreign_keys = on")];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, table.query(ddl)];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, table.query("pragma foreign_keys = off")];
+                    case 3:
+                        _a.sent();
+                        if (!increment) return [3 /*break*/, 5];
+                        seqSql = "insert into sqlite_sequence (`name`, `seq`) " +
+                            ("values ('" + table.name + "', " + (increment[0] - 1) + ")");
+                        return [4 /*yield*/, table.query(seqSql)];
+                    case 4:
+                        _a.sent();
+                        table.sql = ddl + ";\n" + seqSql;
+                        _a.label = 5;
+                    case 5: return [2 /*return*/, table];
+                }
+            });
         });
     };
     return SqliteAdapter;

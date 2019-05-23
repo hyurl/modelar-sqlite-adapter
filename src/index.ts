@@ -1,5 +1,5 @@
 import { Adapter, DB, Table } from "modelar";
-import { Pool, Connection} from "./pool";
+import { Pool, Connection } from "./pool";
 import assign = require("lodash/assign");
 
 export class SqliteAdapter extends Adapter {
@@ -59,7 +59,8 @@ export class SqliteAdapter extends Adapter {
                         } else {
                             if (db.command == "begin") {
                                 this.inTransaction = true;
-                            } else if (db.command == "commit" || db.command == "rollback") {
+                            } else if (db.command == "commit"
+                                || db.command == "rollback") {
                                 this.inTransaction = false;
                             }
                             resolve(db);
@@ -158,23 +159,24 @@ export class SqliteAdapter extends Adapter {
             " (\n\t" + columns.join(",\n\t") + "\n)";
     }
 
-    create(table: Table): Promise<Table> {
+    async create(table: Table): Promise<Table> {
         var ddl = table.getDDL(),
             increment: [number, number] = table["_autoIncrement"];
 
-        return table.query(ddl).then(table => {
-            if (increment) {
-                var seqSql = "insert into sqlite_sequence (`name`, `seq`) " +
-                    `values ('${table.name}', ${increment[0] - 1})`;
+        await table.query("pragma foreign_keys = on");
+        await table.query(ddl);
+        await table.query("pragma foreign_keys = off");
 
-                return table.query(seqSql).then(table => {
-                    table.sql = ddl + ";\n" + seqSql;
-                    return table;
-                });
-            } else {
-                return table;
-            }
-        });
+        if (increment) {
+            var seqSql = "insert into sqlite_sequence (`name`, `seq`) " +
+                `values ('${table.name}', ${increment[0] - 1})`;
+
+            await table.query(seqSql);
+
+            table.sql = ddl + ";\n" + seqSql;
+        }
+
+        return table;
     }
 }
 

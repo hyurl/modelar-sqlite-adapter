@@ -9,6 +9,7 @@
 	[node-sqlite3](https://github.com/mapbox/node-sqlite3)).
 - `node-pre-gyp` installed (`npm i -g node-pre-gyp`) before install this 
 	package.
+- `sqlite3` version v3.6+.
 
 ## Install
 
